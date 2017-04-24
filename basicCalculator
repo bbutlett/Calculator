@@ -1,0 +1,229 @@
+package brock.calculator;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+public class CalculatorFinal {
+	
+	JPanel buttonPanel;
+	JTextArea area;
+	ImageIcon img;
+	
+	String num1,num2;
+	int operation,count =0;
+	
+	ArrayList<JButton> buttons;
+	
+	String pictures[]= {"1.png","2.png","3.png","+.png",
+			"4.png","5.png","6.png","-.png",
+			"7.png","8.png","9.png","x.png",
+			"ce.png","0.png","period.png","divide.png", 
+			"equals.png"};
+	
+	public CalculatorFinal(){
+		
+		setUpGui();
+		}
+	
+	public static void main (String args[]){
+		
+		new CalculatorFinal();
+	}
+	
+	public void setUpGui(){
+	
+		JFrame frame = new JFrame("Calculator");
+		JPanel mainPanel = new JPanel();
+		buttonPanel = new JPanel();
+		buttonPanel.setPreferredSize(new Dimension(280,250));
+		
+		buttons = new ArrayList<JButton>();
+		
+		area = new JTextArea(2,8);
+		area.setLineWrap(true);
+		area.setFont(new Font("Aerial", Font.BOLD, 36));
+		
+		area.setBackground(Color.GRAY);
+		area.setForeground(Color.DARK_GRAY);
+		area.setEditable(false);
+		
+		mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,5));
+		buttonPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,4));
+
+		mainPanel.setBackground(Color.LIGHT_GRAY);
+		mainPanel.add(area);
+		mainPanel.add(buttonPanel);
+		
+		frame.setSize(300,400);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setResizable(true);
+		createButtons();
+		frame.getContentPane().add(mainPanel);
+		frame.setVisible(true);
+	
+		
+	}
+
+public void createButtons(){
+		
+		for (int i = 0; i <17; i++){
+			img = loadImage(pictures[i]);
+			buttons.add(new JButton(img));
+			if(i == 16)
+				buttons.get(i).setPreferredSize(new Dimension(255,42));
+			else
+				buttons.get(i).setPreferredSize(new Dimension(60,42));
+	
+			buttons.get(i).addActionListener(new buttonListener());
+			buttonPanel.add(buttons.get(i));
+		}
+		
+	}
+
+	public ImageIcon loadImage(String i){
+		
+		ImageIcon image = new ImageIcon(getClass().getResource("/img/"+i));
+		return image;
+	}
+
+	public class buttonListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+		
+			if(e.getSource()==buttons.get(0))
+				area.append("1");
+			if(e.getSource()==buttons.get(1))
+				area.append("2");
+			if(e.getSource()==buttons.get(2))
+				area.append("3");
+			if(e.getSource()==buttons.get(3))
+				function(e);
+			if(e.getSource()==buttons.get(4))
+				area.append("4");
+			if(e.getSource()==buttons.get(5))
+				area.append("5");
+			if(e.getSource()==buttons.get(6))
+				area.append("6");
+			if(e.getSource()==buttons.get(7))
+				function(e);
+			if(e.getSource()==buttons.get(8))
+				area.append("7");
+			if(e.getSource()==buttons.get(9))
+				area.append("8");
+			if(e.getSource()==buttons.get(10))
+				area.append("9");
+			if(e.getSource()==buttons.get(11))
+				function(e);
+			if(e.getSource()==buttons.get(12))
+				function(e);
+			if(e.getSource()==buttons.get(13))
+				area.append("0");
+			if(e.getSource()==buttons.get(14))
+				area.append(".");;
+			if(e.getSource()==buttons.get(15))
+				function(e);
+			if(e.getSource()==buttons.get(16))
+				function(e);
+			
+		}
+		
+	}
+
+	public void function(ActionEvent e){
+		
+		if(e.getSource()== buttons.get(3)){
+			
+			if(count == 0){
+			num1 = area.getText();
+			area.setText("");
+			}
+			operation = 0;
+			count++;
+			}
+		if(e.getSource()== buttons.get(7)){
+			if(count == 0){
+			num1 = area.getText();
+			area.setText("");
+			}
+			operation = 1;
+			count++;		}
+		if(e.getSource()== buttons.get(11)){
+			if(count == 0){
+				num1 = area.getText();
+				area.setText("");
+			}
+			operation = 2;
+			count++;
+		}
+		if(e.getSource()== buttons.get(15)){
+			if(count == 0){
+				num1 = area.getText();
+				area.setText("");
+			}
+			operation = 3;
+			count++;
+		}
+		if(e.getSource()== buttons.get(12)){
+			count =0;
+			num1 = "";
+			num2= "";
+			area.setText("");
+			
+		}
+		
+		if(e.getSource()== buttons.get(16)){	
+			calculate();
+				
+		}
+		
+		
+	}
+
+	public void calculate(){
+		num2 = area.getText();
+		double ans = 0;
+	
+		
+		if(operation == 0){
+			ans = Double.parseDouble(num1)+Double.parseDouble(num2);
+			area.setText(Double.toString(ans));
+
+		
+		}
+		if(operation == 1){
+			ans = Double.parseDouble(num1)-Double.parseDouble(num2);
+			area.setText(Double.toString(ans));
+
+		}
+		if(operation == 3){
+			if(Double.parseDouble(num2) == 0.0)
+				area.setText("ERROR");
+			else{
+			ans =(double)Double.parseDouble(num1)/Double.parseDouble(num2);
+			area.setText(Double.toString(ans));
+			}
+		}
+		if(operation == 2){
+			
+			ans = Double.parseDouble(num1)*Double.parseDouble(num2);
+			area.setText(Double.toString(ans));
+		}
+		
+		
+	}
+}
+
+	
+	
+
